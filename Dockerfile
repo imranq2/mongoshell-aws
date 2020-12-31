@@ -20,3 +20,5 @@ RUN apt-get update
 RUN apt-get -y install mongodb-org-shell
 RUN apt-get -y install mongodb-org-tools
 
+COPY promote.sh /
+RUN chmod +777 /promote.sh
