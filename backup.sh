@@ -15,12 +15,10 @@ CERT_FILE="/usr/local/bin/rds-combined-ca-bundle.pem"
 
 rm -rf "/backup/${MONGO_DB_NAME}"
 
+MONGO_URL="mongodb://${MONGO_USER}:${MONGO_PASSWORD}@${MONGO_SERVER}:${MONGO_SERVER_PORT}/?tls=true&tlsCAFile=${CERT_FILE}&replicaSet=rs0&readPreference=secondaryPreferred&retryWrites=false"
+
 # Run backup
-mongodump --archive \
-  --ssl \
-  --uri "mongodb://${MONGO_USER}:${MONGO_PASSWORD}@${MONGO_SERVER}:${MONGO_SERVER_PORT}/?tls=true&tlsCAFile=${CERT_FILE}&replicaSet=rs0&readPreference=secondaryPreferred&retryWrites=false" \
-	--out="/backup/dump/${MONGO_DB_NAME}" \
-	--db="${MONGO_DB_NAME}"
+mongodump --archive="/backup/dump/${MONGO_DB_NAME}" --ssl --uri "${MONGO_URL}" --db="${MONGO_DB_NAME}"
 
 # Compress backup
 cd "/backup/${MONGO_DB_NAME}" && tar -cvzf "${BACKUP_NAME}" dump
