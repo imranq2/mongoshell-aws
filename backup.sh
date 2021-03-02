@@ -3,7 +3,7 @@
 # from https://github.com/Drivetech/mongodump-s3
 # Environment variables to set
 # MONGO_USER
-# MONDO_PASSWORD
+# MONGO_PASSWORD
 # MONGO_SERVER
 # MONGO_SERVER_PORT
 # MONGO_DB_NAME
@@ -18,7 +18,7 @@ rm -rf "/backup/${MONGO_DB_NAME}"
 # Run backup
 mongodump --archive \
   --ssl \
-  --uri "mongodb://${MONGO_USER}:${MONDO_PASSWORD}@${MONGO_SERVER}:${MONGO_SERVER_PORT}/?tls=true&tlsCAFile=${CERT_FILE}&replicaSet=rs0&readPreference=secondaryPreferred&retryWrites=false" \
+  --uri "mongodb://${MONGO_USER}:${MONGO_PASSWORD}@${MONGO_SERVER}:${MONGO_SERVER_PORT}/?tls=true&tlsCAFile=${CERT_FILE}&replicaSet=rs0&readPreference=secondaryPreferred&retryWrites=false" \
 	--out="/backup/dump/${MONGO_DB_NAME}" \
 	--db="${MONGO_DB_NAME}"
 
