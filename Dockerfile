@@ -6,17 +6,20 @@ FROM debian:stable-slim
 RUN apt-get update && \
     # Install security updates:
     apt-get -y upgrade && \
-    apt-get -y install gnupg curl && \
+    apt-get -y install gnupg curl wget && \
     # Install required ca-certificates to prevent the error in the certificate verification
     apt-get -y install ca-certificates && update-ca-certificates && \
     # Download the Amazon DocumentDB Certificate Authority (CA) certificate required to authenticate to your cluster
     curl https://s3.amazonaws.com/rds-downloads/rds-combined-ca-bundle.pem -o /usr/local/bin/rds-combined-ca-bundle.pem && \
-    curl https://www.mongodb.org/static/pgp/server-4.4.asc | apt-key add - && \
-    echo "deb http://repo.mongodb.org/apt/debian buster/mongodb-org/4.4 main" | tee /etc/apt/sources.list.d/mongodb-org-4.4.list && \
+    gpg --keyserver hkp://keyserver.ubuntu.com --refresh-keys && \
+    wget -qO - https://www.mongodb.org/static/pgp/server-5.0.asc | apt-key add - && \
+#    curl https://www.mongodb.org/static/pgp/server-5.0.asc | apt-key add - && \
+    echo "deb http://repo.mongodb.org/apt/debian buster/mongodb-org/5.0 main" | tee /etc/apt/sources.list.d/mongodb-org-5.0.list && \
     # Install the MongoDB packages
     apt-get update && \
-    apt-get -y install mongodb-org-shell && \
-    apt-get -y install mongodb-org-tools && \
+    apt-get -y install mongodb-org-shell=5.0.7 && \
+    apt-get -y install mongodb-org-tools=5.0.7 && \
+    apt-get install -y mongodb-mongosh=1.3.1 && \
     apt-get -y install awscli && \
     apt-get clean autoclean && \
     apt-get autoremove --yes && \
